@@ -117,14 +117,6 @@ public class EntradasService(IDbContextFactory<Contexto> DbFactory)
 
         return await contexto.SaveChangesAsync() > 0;
     }
-
-    public async Task<List<Producto>> ListarProductos()
-    {
-        await using var contexto = await DbFactory.CreateDbContextAsync();
-        return await contexto.Productos
-            .AsNoTracking()
-            .ToListAsync();
-    }
 }
 
 public enum TipoOperacion
