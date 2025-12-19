@@ -1,0 +1,53 @@
+﻿@page "/entradas"
+@inject EntradasService entradasService
+
+@code {
+	public List<Entrada> ListaEntradas { get; set; } = new List<Entrada>();
+	public string? Filtro { get; set; }
+	public string? ValorFiltro { get; set; }
+	public DateTime? FechaDesde { get; set; }
+	public DateTime? FechaHasta { get; set; }
+
+	protected override async Task OnInitializedAsync()
+	{
+		ListaEntradas = await entradasService.Listar(e => e.EntradaId > 0);
+	}
+
+	public async Task Buscar()
+	{
+		if (FechaDesde.HasValue && FechaHasta.HasValue)
+		{
+			ListaEntradas = await entradasService.Listar(
+				e => e.FechaEntrada.Date >= FechaDesde.Value && e.FechaEntrada.Date <= FechaHasta.Value
+			);
+		}
+		else if (FechaDesde.HasValue)
+		{
+			ListaEntradas = await entradasService.Listar(
+				e => e.FechaEntrada.Date >= FechaDesde.Value
+			);
+		}
+		else if (FechaHasta.HasValue)
+		{
+			ListaEntradas = await entradasService.Listar(
+				e => e.FechaEntrada.Date <= FechaHasta.Value
+			);
+		}
+
+		if (!string.IsNullOrWhiteSpace(ValorFiltro))
+		{
+			if (Filtro == "EntradaId" && int.TryParse(ValorFiltro, out var entradaId))
+			{
+				ListaEntradas = await entradasService.Listar(e => e.EntradaId == entradaId);
+			}
+			else if (Filtro == "Concepto")
+			{
+				ListaEntradas = await entradasService.Listar(e => e.Concepto.ToLower().Contains(ValorFiltro));
+			}
+			else if (Filtro == "Total" && decimal.TryParse(ValorFiltro, out var total))
+			{
+				ListaEntradas = await entradasService.Listar(e => e.Total == total);
+			}
+		}
+	}
+}
