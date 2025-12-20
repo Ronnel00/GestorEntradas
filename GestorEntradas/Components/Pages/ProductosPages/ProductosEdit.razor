@@ -1,0 +1,54 @@
+﻿@page "/productos/edit/{ProductoId:int}"
+@inject ProductosService productosService
+@inject NavigationManager nav
+@rendermode InteractiveServer
+
+@code {
+	[Parameter]
+	public int ProductoId { get; set; }
+
+	public Producto Producto { get; set; } = new Producto();
+	public string? errorMensaje { get; set; }
+	public bool mostrarModal = false;
+
+	protected override async Task OnInitializedAsync()
+	{
+		Producto = await productosService.Buscar(ProductoId);
+	}
+
+	private async Task Guardar()
+	{
+		var modificado = await productosService.Guardar(Producto);
+		if (modificado)
+		{
+			nav.NavigateTo("/productos");
+		}
+		else
+		{
+			errorMensaje = "No se pudo modificar el producto.";
+		}
+	}
+
+	private async Task Eliminar()
+	{
+		var eliminado = await productosService.Eliminar(ProductoId);
+		if (eliminado)
+		{
+			nav.NavigateTo("/productos");
+		}
+		else
+		{
+			errorMensaje = "No se pudo eliminar el producto.";
+		}
+	}
+
+	private void MostrarModal()
+	{
+		mostrarModal = true;
+	}
+
+	private void CerrarModal()
+	{
+		mostrarModal = false;
+	}
+}

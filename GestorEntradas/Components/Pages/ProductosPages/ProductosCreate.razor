@@ -1,6 +1,7 @@
 ﻿@page "/productos/create"
 @inject ProductosService productosService
 @inject NavigationManager nav
+@rendermode InteractiveServer
 
 <PageTitle>Crear - Productos</PageTitle>
 <EditForm Model="Producto" OnValidSubmit="Guardar" FormName="CreateProducto">
