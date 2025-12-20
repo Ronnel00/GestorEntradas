@@ -57,48 +57,50 @@
 						<label class="col-form-label input-group-text">Costo:</label>
 						<InputNumber class="form-control" @bind-Value="DetalleSeleccionado.Costo" min="0"></InputNumber>
 
-						<button type="button" class="btn bt-outline-primary" @onclick="AgregarDetalle">
+						<button type="button" class="btn btn-outline-primary" @onclick="AgregarDetalle">
 							<span class="bi bi-plus-square"></span> Agregar
 						</button>
 					</div>
 
 					@if (!string.IsNullOrWhiteSpace(errorMensaje))
 					{
-						<div class="alert alert-danger">@errorMensaje</div>
+						<div class="alert alert-danger mt-3">@errorMensaje</div>
 					}
 
 					<hr class="py-1" />
 
-					<table class="table table-light table-bordered table-hover mt-2">
-						<thead>
-							<tr class="text-center">
-								<th>ID</th>
-								<th>Descripci&oacute;n</th>
-								<th>Cantidad</th>
-								<th>Costo</th>
-								<th>Total</th>
-								<th>Acci&oacute;n</th>
-							</tr>
-						</thead>
-
-						<tbody>
-							@foreach (var d in Entrada.Detalles)
-							{
-								<tr>
-									<td>@ListaProductos.FirstOrDefault(c => c.ProductoId == d.ProductoId)?.ProductoId</td>
-									<td>@ListaProductos.FirstOrDefault(c => c.ProductoId == d.ProductoId)?.Descripcion</td>
-									<td>@d.Cantidad</td>
-									<td>@d.Costo</td>
-									<td>@(d.Cantidad* d.Costo)</td>
-									<td>
-										<button type="button" class="btn btn-outline-danger btn-sm" @onclick="() => RemoverDetalle(d)">
-											<span class="bi bi-trash"></span>
-										</button>
-									</td>
+					<div class="table-responsive">
+						<table class="table table-light table-bordered table-hover mt-2">
+							<thead>
+								<tr class="text-center">
+									<th>ID</th>
+									<th>Descripci&oacute;n</th>
+									<th>Cantidad</th>
+									<th>Costo</th>
+									<th>Total</th>
+									<th>Acci&oacute;n</th>
 								</tr>
-							}
-						</tbody>
-					</table>
+							</thead>
+
+							<tbody>
+								@foreach (var d in Entrada.Detalles)
+								{
+									<tr>
+										<td>@ListaProductos.FirstOrDefault(c => c.ProductoId == d.ProductoId)?.ProductoId</td>
+										<td>@ListaProductos.FirstOrDefault(c => c.ProductoId == d.ProductoId)?.Descripcion</td>
+										<td>@d.Cantidad</td>
+										<td>@d.Costo</td>
+										<td>@(d.Cantidad* d.Costo)</td>
+										<td>
+											<button type="button" class="btn btn-outline-danger btn-sm" @onclick="() => RemoverDetalle(d)">
+												<span class="bi bi-trash"></span>
+											</button>
+										</td>
+									</tr>
+								}
+							</tbody>
+						</table>
+					</div>
 
 					<hr />
 
@@ -139,6 +141,7 @@
 	protected override async Task OnInitializedAsync()
 	{
 		ListaProductos = await productosService.ListarProductos(p => p.ProductoId > 0);
+		Entrada.FechaEntrada = DateTime.Now;
 	}
 
 	private async Task Guardar()
@@ -162,14 +165,17 @@
 		if (DetalleSeleccionado.ProductoId == 0)
 		{
 			errorMensaje = "Debe seleccionar al menos 1 producto.";
+			return;
 		}
 		else if (DetalleSeleccionado.Cantidad <= 0)
 		{
 			errorMensaje = "La cantidad debe ser mayor que 0.";
+			return;
 		}
 		else if (DetalleSeleccionado.Costo <= 0)
 		{
 			errorMensaje = "El costo debe ser mayor que 0.";
+			return;
 		}
 
 		var producto = ListaProductos.Single(p => p.ProductoId == DetalleSeleccionado.ProductoId);

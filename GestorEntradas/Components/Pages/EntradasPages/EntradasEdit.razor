@@ -6,6 +6,7 @@
 
 <PageTitle>Editar - Entrada</PageTitle>
 <EditForm Model="Entrada" OnValidSubmit="Guardar" FormName="EditEntrada">
+	<DataAnnotationsValidator />
 	<div class="container">
 		<div class="card shadow-lg">
 			<div class="card-header text-center">
@@ -62,7 +63,7 @@
 
 					@if (!string.IsNullOrWhiteSpace(errorMensaje))
 					{
-						<div class="alert alert-danger">@errorMensaje</div>
+						<div class="alert alert-danger mt-3">@errorMensaje</div>
 					}
 
 					<hr class="py-1" />
@@ -182,6 +183,7 @@
 		{
 			Entrada = await entradasService.Buscar(EntradaId);
 		}
+		Entrada?.FechaEntrada = DateTime.Now;
 	}
 
 	private async Task Guardar()

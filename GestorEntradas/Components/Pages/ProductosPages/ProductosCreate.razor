@@ -2,6 +2,61 @@
 @inject ProductosService productosService
 @inject NavigationManager nav
 
+<PageTitle>Crear - Productos</PageTitle>
+<EditForm Model="Producto" OnValidSubmit="Guardar" FormName="CreateProducto">
+	<DataAnnotationsValidator />
+	<div class="container">
+		<div class="card shadow-lg">
+			<div class="card-header text-center">
+				<h5 class="card-title">Crear Producto</h5>
+			</div>
+
+			<div class="card-body">
+				<div class="mb-3">
+					<label class="form-label">Producto ID</label>
+					<InputNumber class="form-control" @bind-Value="Producto.ProductoId" readonly></InputNumber>
+					<ValidationMessage For="() => Producto.ProductoId" />
+				</div>
+
+				<div class="mb-3">
+					<label class="form-label">Descripci&oacute;n</label>
+					<InputText class="form-control" @bind-Value="Producto.Descripcion"></InputText>
+					<ValidationMessage For="() => Producto.Descripcion" />
+				</div>
+
+				<div class="mb-3">
+					<label class="form-label">Costo</label>
+					<InputNumber class="form-control" @bind-Value="Producto.Costo"></InputNumber>
+					<ValidationMessage For="() => Producto.Costo" />
+				</div>
+
+				<div class="mb-3">
+					<label class="form-label">Precio</label>
+					<InputNumber class="form-control" @bind-Value="Producto.Precio"></InputNumber>
+					<ValidationMessage For="() => Producto.Precio" />
+				</div>
+
+				<div class="mb-3">
+					<label class="form-label">Existencia</label>
+					<InputNumber class="form-control" @bind-Value="Producto.Existencia" readonly></InputNumber>
+					<p class="text-muted">Nota: Puede agregar existencia al producto realizando entradas.</p>
+					<ValidationMessage For="() => Producto.Existencia" />
+				</div>
+			</div>
+
+			<div class="card-footer text-center">
+				<a href="/productos" class="btn btn-secondary">
+					<span class="bi bi-arrow-left"></span> Volver
+				</a>
+
+				<button type="submit" class="btn btn-primary">
+					<span class="bi bi-save"></span> Guardar
+				</button>
+			</div>
+		</div>
+	</div>
+</EditForm>
+
 @code {
 	public Producto Producto { get; set; } = new Producto();
 	public string? errorMensaje { get; set; }
