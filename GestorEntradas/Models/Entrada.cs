@@ -14,9 +14,6 @@ public class Entrada
     [Required(ErrorMessage = "El concepto es obligatorio.")]
     public string Concepto { get; set; } = string.Empty;
 
-    [Required(ErrorMessage = "El total es obligatorio.")]
-    public decimal Total { get; set; }
-
     [InverseProperty("Entrada")]
     public virtual ICollection<EntradaDetalle> Detalles { get; set; } = new List<EntradaDetalle>();
 }

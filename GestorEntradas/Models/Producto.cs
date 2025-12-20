@@ -15,7 +15,7 @@ public class Producto
     [Required(ErrorMessage = "El costo es obligatorio.")]
     public double Costo { get; set; }
 
-    [Range(0, double.MaxValue, ErrorMessage = "El precio debe ser mayor que 0.")]
+    [Range(0.01, double.MaxValue, ErrorMessage = "El precio debe ser mayor que 0.")]
     [Required(ErrorMessage = "El precio es obligatorio.")]
     public double Precio { get; set; }
 

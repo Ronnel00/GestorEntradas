@@ -19,7 +19,6 @@
 						<option value="" selected disabled>Seleccione una opci&oacute;n</option>
 						<option value="EntradaId">EntradaId</option>
 						<option value="Concepto">Concepto</option>
-						<option value="Total">Total</option>
 					</InputSelect>
 				</div>
 
@@ -63,7 +62,7 @@
 								<td>@e.FechaEntrada.ToShortDateString()</td>
 								<td>@e.EntradaId</td>
 								<td>@e.Concepto</td>
-								<td>@e.Total</td>
+								<td>@e.Detalles.Sum(d => d.Cantidad * d.Costo)</td>
 								<td>
 									<a href="/entradas/edit/@e.EntradaId" class="btn btn-outline-warning">
 										<span class="bi bi-pencil"></span>	
@@ -80,9 +79,6 @@
 			<div class="row">
 				<div class="col-6">
 					<label>Cantidad de Entradas: @ListaEntradas.Count()</label>
-				</div>
-				<div class="col-6">
-					<label>Total de Entradas: @ListaEntradas.Sum(e => e.Total)</label>
 				</div>
 			</div>
 		</div>
@@ -131,10 +127,6 @@
 			else if (Filtro == "Concepto")
 			{
 				ListaEntradas = await entradasService.Listar(e => e.Concepto.ToLower().Contains(ValorFiltro));
-			}
-			else if (Filtro == "Total" && decimal.TryParse(ValorFiltro, out var total))
-			{
-				ListaEntradas = await entradasService.Listar(e => e.Total == total);
 			}
 		}
 	}
