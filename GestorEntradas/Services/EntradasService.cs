@@ -22,7 +22,7 @@ public class EntradasService(IDbContextFactory<Contexto> DbFactory)
         return await contexto.SaveChangesAsync() > 0;
     }
 
-    private async Task AfectarExistenciaProducto(EntradaDetalle[] detalle, TipoOperacion operacion)
+    private async Task AfectarExistenciaProducto(Contexto contexto, EntradaDetalle[] detalle, TipoOperacion operacion)
     {
         await using var contexto = await DbFactory.CreateDbContextAsync();
         foreach (var item in detalle)
@@ -30,6 +30,8 @@ public class EntradasService(IDbContextFactory<Contexto> DbFactory)
             var producto = await contexto.Productos
                 .SingleAsync(p => p.ProductoId == item.ProductoId);
 
+            if (producto != null)
+            {
             if (operacion == TipoOperacion.Suma)
             {
                 producto.Existencia += item.Cantidad;
@@ -39,6 +41,7 @@ public class EntradasService(IDbContextFactory<Contexto> DbFactory)
                 producto.Existencia -= item.Cantidad;
             }
         }
+    }
     }
     
     private async Task<bool> Modificar(Entrada entrada)
