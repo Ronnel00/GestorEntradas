@@ -1,4 +1,5 @@
 ﻿@page "/entradas/edit/{EntradaId:int}"
+@attribute [Authorize]
 @inject EntradasService entradasService
 @inject ProductosService productosService
 @inject NavigationManager nav
